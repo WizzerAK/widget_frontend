@@ -25,7 +25,8 @@
     async function scheduleCalls() {
       const payload = {
         leadIds: leadIds,
-        start_time: document.getElementById("start_time").value,
+        start_time: new Date(document.getElementById("start_time").value).toISOString(),
+
         call_owner: document.getElementById("call_owner").value,
         subject: document.getElementById("call_subject").value,
         purpose: document.getElementById("call_purpose").value,
