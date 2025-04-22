@@ -17,7 +17,7 @@
 
     window.onload = () => {
       const params = new URLSearchParams(window.location.search);
-      const leadIdsRaw = params.get("ids");// Comma-separated IDs
+      const leadIdsRaw = params.get("recordIds"); // Comma-separated IDs
       leadIds = leadIdsRaw ? leadIdsRaw.split(",") : [];
       document.getElementById("lead_count").innerText = leadIds.length;
     };
