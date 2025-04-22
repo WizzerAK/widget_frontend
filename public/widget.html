@@ -1,0 +1,67 @@
+<!-- public/widget.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Schedule Calls</title>
+  <style>
+    body { font-family: Arial; padding: 20px; max-width: 600px; margin: auto; }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    input, textarea, select, button {
+      width: 100%; padding: 8px; margin-top: 4px;
+    }
+    button { margin-top: 20px; }
+  </style>
+  <script>
+    let leadIds = [];
+
+    window.onload = () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const raw = urlParams.get("ids");
+      leadIds = raw ? raw.split(",") : [];
+      document.getElementById("lead_count").innerText = leadIds.length;
+    };
+
+    async function scheduleCalls() {
+      const payload = {
+        leadIds: leadIds,
+        start_time: document.getElementById("start_time").value,
+        call_owner: document.getElementById("call_owner").value,
+        subject: document.getElementById("call_subject").value,
+        purpose: document.getElementById("call_purpose").value,
+        agenda: document.getElementById("call_agenda").value,
+      };
+
+      const res = await fetch("https://widget-backend-83cg.onrender.com/api/schedule-calls", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+      alert(data.message || "Done!");
+    }
+  </script>
+</head>
+<body>
+  <h2>📞 Schedule Bulk Calls</h2>
+  <p><strong>Selected Leads:</strong> <span id="lead_count">0</span></p>
+
+  <label for="start_time">Start Time:</label>
+  <input type="datetime-local" id="start_time" required />
+
+  <label for="call_owner">Call Owner ID:</label>
+  <input type="text" id="call_owner" placeholder="Paste Zoho user ID" required />
+
+  <label for="call_subject">Call Subject:</label>
+  <input type="text" id="call_subject" placeholder="e.g., Follow-up Call" required />
+
+  <label for="call_purpose">Call Purpose:</label>
+  <input type="text" id="call_purpose" placeholder="e.g., Demo, Qualification" />
+
+  <label for="call_agenda">Call Agenda:</label>
+  <textarea id="call_agenda" placeholder="Brief description..."></textarea>
+
+  <button onclick="scheduleCalls()">🚀 Schedule Calls</button>
+</body>
+</html>
